@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphabet Learning Game</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  /* Custom styles */
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+  .instruction {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .alphabet {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  .option {
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #63b3ed;
+    border-radius: 5px;
+    color: white;
+  }
+  .missing {
+    border: 2px dashed #3182ce;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px;
+    display: inline-block;
+    background-color: #ebf8ff;
+  }
+  .bg-gray-200 {
+    background-color: #edf2f7;
+  }
+  .circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background-color: white;
+    color: black;
+    margin: 8px auto;
+    font-size: 16px;
+  }
+  .main-content {
+    margin-right: 60px;
+  }
+</style>
+</head>
+<body class="bg-gray-200 relative">
+
+<!-- Main Content -->
+<div class="container">
+    <h1 class="text-3xl font-bold">Find the Missing Letters</h1>
+    <p class="instruction">Drag and drop the missing letters to their respective positions:</p>
+    <div class="alphabet" id="alphabet"></div>
+    <div id="options-container" class="mb-4"></div>
+    <button onclick="checkAnswer()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Check Answer</button>
+    <button onclick="resetGame()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Reset</button>
+    <p id="result" class="text-xl font-bold"></p>
+</div>
+
+<script>
+    let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let missingIndexes = [];
+    const numberOfMissing = Math.floor(Math.random() * 3) + 3; // Randomly select 3 to 5 missing letters
+
+    // Initialize game
+    function initializeGame() {
+        let alphabetHtml = "";
+        missingIndexes = [];
+        for (let i = 0; i < numberOfMissing; i++) {
+            const randomIndex = Math.floor(Math.random() * alphabet.length);
+            missingIndexes.push(randomIndex);
+        }
+        for (let i = 0; i < alphabet.length; i++) {
+            if (missingIndexes.includes(i)) {
+                alphabetHtml += `<div class="missing" id="missing-${i}" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`;
+            } else {
+                alphabetHtml += `<span>${alphabet[i]}</span>`;
+            }
+        }
+        document.getElementById("alphabet").innerHTML = alphabetHtml;
+        initializeOptions();
+    }
+
+    // Initialize options for missing letters
+    function initializeOptions() {
+        let optionsHtml = "";
+        for (let i = 0; i < missingIndexes.length; i++) {
+            const index = missingIndexes[i];
+            optionsHtml += `<div class="option" id="option-${index}" draggable="true" ondragstart="drag(event)">${alphabet[index]}</div>`;
+        }
+        document.getElementById("options-container").innerHTML = optionsHtml;
+    }
+
+    // Drag and drop functions
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text");
+        const draggedElement = document.getElementById(data);
+        event.target.appendChild(draggedElement);
+    }
+
+    // Check if answer is correct
+    function checkAnswer() {
+        let correct = true;
+        for (let i = 0; i < missingIndexes.length; i++) {
+            const index = missingIndexes[i];
+            const missingElement = document.getElementById(`missing-${index}`);
+            if (!missingElement.textContent || missingElement.textContent.toUpperCase() !== alphabet[index]) {
+                correct = false;
+                break;
+            }
+        }
+        if (correct) {
+            document.getElementById("result").textContent = "Correct! Well done!";
+        } else {
+            document.getElementById("result").textContent = "Incorrect. Try again!";
+        }
+    }
+
+    // Reset the game
+    function resetGame() {
+        document.getElementById("result").textContent = "";
+        initializeGame();
+    }
+
+    // Initialize game when page loads
+    window.onload = initializeGame;
+</script>
+</body>
+</html>

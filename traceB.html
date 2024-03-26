@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphabet Tracing</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Custom styles */
+  .sidebar-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px; /* Adjusted width for alignment */
+  }
+  .circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background-color: white;
+    color: black;
+    margin: 8px auto; /* Adjusted margin for alignment */
+    font-size: 16px; /* Adjusted font size for alignment */
+  }
+  .main-content {
+    margin-right: 60px; /* Add margin to the right of the main content */
+  }
+  canvas {
+    border: 4px dashed gray;
+    border-radius: 1rem;
+  }
+  /* Style for exit button */
+  .exit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 60;
+  }
+</style>
+</head>
+<body class="bg-gray-200 relative">
+
+<!-- Left Color Selector Sidebar -->
+<div class="fixed left-0 top-0 h-full flex flex-col items-center bg-blue-500 text-white py-8 space-y-2 z-10">
+  <!-- Color buttons -->
+  <button onclick="changeColor('#EF4444')" class="w-10 h-10 bg-red-500 rounded-full"></button>
+  <button onclick="changeColor('#10B981')" class="w-10 h-10 bg-green-500 rounded-full"></button>
+  <button onclick="changeColor('#3B82F6')" class="w-10 h-10 bg-blue-500 rounded-full"></button>
+  <!-- Erase button -->
+  <button onclick="changeColor('#FFFFFF')" class="w-10 h-10 bg-gray-300 rounded-full">🧽</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-content pl-16">
+  <div class="flex justify-center items-center h-screen">
+    <canvas id="alphabetCanvas" width="800" height="400"></canvas>
+  </div>
+</div>
+
+<!-- Right Alphabet Navigation Sidebar -->
+<div class="fixed inset-y-0 right-0 flex flex-col w-24 bg-blue-500 text-white text-xl">
+  <!-- Alphabet Buttons -->
+  <a href="traceA.html" class="circle">Aa</a>
+  <a href="traceB.html" class="circle">Bb</a>
+  <a href="trace-c.html" class="circle">Cc</a>
+  <a href="trace-d.html" class="circle">Dd</a>
+  <a href="trace-e.html" class="circle">Ee</a>
+  <a href="trace-f.html" class="circle">Ff</a>
+  <a href="trace-f.html" class="circle">Gg</a>
+  <a href="trace-f.html" class="circle">Hh</a>
+  <a href="trace-f.html" class="circle">Ii</a>
+  <a href="trace-f.html" class="circle">Jj</a>
+  <a href="trace-c.html" class="circle">Kk</a>
+  <a href="trace-d.html" class="circle">Ll</a>
+  <a href="trace-e.html" class="circle">Mm</a>
+  <a href="trace-f.html" class="circle">Nn</a>
+  <a href="trace-f.html" class="circle">Oo</a>
+  <a href="trace-f.html" class="circle">Pp</a>
+  <a href="trace-f.html" class="circle">Qq</a>
+  <a href="trace-f.html" class="circle">Rr</a>
+  <!-- ... add more letters as needed -->
+</div>
+
+<!-- Footer -->
+<div class="fixed inset-x-0 bottom-0 bg-white shadow z-20">
+  <div class="flex justify-between items-center max-w-6xl mx-auto py-3">
+    <button class="bg-gray-300 text-gray-700 rounded-full px-6 py-2"onclick="location.href='homepage.html';">Return to Home</button>
+    <!-- Speaker button -->
+    <button class="text-3xl" onclick="speakLetter()">🎤</button>
+    <button onclick="window.open('https://www.youtube.com/watch?v=O1MfdgzzdHo')">help</button>
+  </div>
+</div>
+
+
+
+<script>
+  let canvas = document.getElementById('alphabetCanvas');
+  let ctx = canvas.getContext('2d');
+  let drawing = false;
+  let currentColor = '#000000';
+  let backgroundImage = new Image();
+  backgroundImage.src = 'b.jpg';
+
+  // Ensure the image is loaded before attempting to draw it
+  backgroundImage.onload = function() {
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+  };
+
+  function startDrawing(e) {
+    drawing = true;
+    draw(e);
+  }
+
+  function endDrawing() {
+    drawing = false;
+    ctx.beginPath();
+  }
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = currentColor;
+    
+    ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+  }
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mouseup', endDrawing);
+  canvas.addEventListener('mousemove', draw);
+
+  function changeColor(color) {
+    currentColor = color;
+  }
+
+  function speakLetter() {
+    let utterance = new SpeechSynthesisUtterance('B');
+    speechSynthesis.speak(utterance);
+  }
+
+  function closeVideo() {
+    document.getElementById('videoOverlay').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>

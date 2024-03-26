@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-pink-100">
+
+  <!-- Top navigation bar -->
+  <div class="bg-white p-4 flex items-center justify-between shadow-md">
+    <button class="rounded-full p-2 text-gray-600">
+      ←
+    </button>
+    <h1 class="text-xl font-bold">Exercise</h1>
+    <button class="rounded-full p-2 text-gray-600">
+      ☰
+    </button>
+  </div>
+
+  <!-- Progress tracker -->
+  <div class="flex justify-center space-x-2 p-4">
+    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200">1</span>
+    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200">2</span>
+    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200">3</span>
+    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-400 bg-gray-200">4</span>
+    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-gray-400 bg-gray-200">5</span>
+  </div>
+
+  <!-- Question section -->
+  <div class="text-center p-4">
+    <h2 class="font-bold text-lg">WHAT LETTER DOES THIS START WITH?</h2>
+    <!-- Image (replace with your actual image source) -->
+    <img src="https://t4.ftcdn.net/jpg/01/12/29/41/360_F_112294118_isIxVhhaP6iPDzV8A8CTgoxQG8GE3rSb.jpg" alt="Question Image" class="mx-auto my-4 rounded-lg shadow-lg" style="max-width: 90%; height: auto;">
+</div>
+
+
+<!-- Answer options -->
+<div class="flex flex-wrap justify-around p-4">
+    <button onclick="showResult(true)" class="bg-yellow-200 hover:bg-yellow-300 text-yellow-800 font-semibold py-4 px-6 rounded-full m-2 shadow text-xl">A</button>
+    <button onclick="showResult(false)" class="bg-pink-200 hover:bg-pink-300 text-pink-800 font-semibold py-4 px-6 rounded-full m-2 shadow text-xl">B</button>
+    <button onclick="showResult(false)" class="bg-blue-200 hover:bg-blue-300 text-blue-800 font-semibold py-4 px-6 rounded-full m-2 shadow text-xl">C</button>
+    <button onclick="showResult(false)" class="bg-orange-200 hover:bg-orange-300 text-orange-800 font-semibold py-4 px-6 rounded-full m-2 shadow text-xl">D</button>
+  </div>
+
+  <!-- Next button at the bottom right corner -->
+  <div class="fixed bottom-4 right-4">
+    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg"onclick="location.href='progress.html';">Next</button>
+  </div>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center" style="display: none;">
+  <div class="bg-white rounded-lg p-4 max-w-sm mx-auto">
+    <h3 id="modalContent" class="text-center font-semibold text-xl"></h3>
+  </div>
+</div>
+
+<script>
+  function showResult(isCorrect) {
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    if (isCorrect) {
+      modalContent.textContent = 'Correct!';
+    } else {
+      modalContent.innerHTML = 'Wrong Answer!<br>The image shown is an ant. It starts with the letter A';
+    }
+    modal.style.display = 'flex';
+  }
+
+  // To close the modal when the background is clicked
+  document.getElementById('modal').addEventListener('click', function() {
+    this.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
+
+
+

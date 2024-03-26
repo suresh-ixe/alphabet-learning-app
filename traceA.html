@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphabet Tracing</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Custom styles */
+  .sidebar-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px; /* Adjusted width for alignment */
+  }
+  .circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background-color: white;
+    color: black;
+    margin: 8px auto; /* Adjusted margin for alignment */
+    font-size: 16px; /* Adjusted font size for alignment */
+  }
+  .main-content {
+    margin-right: 60px; /* Add margin to the right of the main content */
+  }
+  canvas {
+    border: 4px dashed gray;
+    border-radius: 1rem;
+  }
+  /* Style for exit button */
+  .exit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 60;
+  }
+</style>
+</head>
+<body class="bg-gray-200 relative">
+
+<!-- Left Color Selector Sidebar -->
+<div class="fixed left-0 top-0 h-full flex flex-col items-center bg-blue-500 text-white py-8 space-y-2 z-10">
+  <!-- Color buttons -->
+  <button onclick="changeColor('#EF4444')" class="w-10 h-10 bg-red-500 rounded-full"></button>
+  <button onclick="changeColor('#10B981')" class="w-10 h-10 bg-green-500 rounded-full"></button>
+  <button onclick="changeColor('#3B82F6')" class="w-10 h-10 bg-blue-500 rounded-full"></button>
+  <!-- Erase button -->
+  <button onclick="changeColor('#FFFFFF')" class="w-10 h-10 bg-gray-300 rounded-full">🧽</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-content pl-16">
+  <div class="flex justify-center items-center h-screen">
+    
+    <canvas id="alphabetCanvas" width="800" height="400"></canvas>
+    <button onclick="validateDrawing()" class="bg-blue-500 text-white rounded-full py-2 px-4 mt-4">Validate</button>
+  </div>
+  <!-- Validate button -->
+  
+</div>
+
+<!-- Right Alphabet Navigation Sidebar -->
+<div class="fixed inset-y-0 right-0 flex flex-col w-24 bg-blue-500 text-white text-xl">
+  <!-- Alphabet Buttons -->
+  <a href="traceA.html" class="circle">Aa</a>
+  <a href="traceB.html" class="circle">Bb</a>
+  <a href="trace-c.html" class="circle">Cc</a>
+  <a href="trace-d.html" class="circle">Dd</a>
+  <a href="trace-e.html" class="circle">Ee</a>
+  <a href="trace-f.html" class="circle">Ff</a>
+  <a href="trace-f.html" class="circle">Gg</a>
+  <a href="trace-f.html" class="circle">Hh</a>
+  <a href="trace-f.html" class="circle">Ii</a>
+  <a href="trace-f.html" class="circle">Jj</a>
+  <a href="trace-c.html" class="circle">Kk</a>
+  <a href="trace-d.html" class="circle">Ll</a>
+  <a href="trace-e.html" class="circle">Mm</a>
+  <a href="trace-f.html" class="circle">Nn</a>
+  <a href="trace-f.html" class="circle">Oo</a>
+  <a href="trace-f.html" class="circle">Pp</a>
+  <a href="trace-f.html" class="circle">Qq</a>
+  <a href="trace-f.html" class="circle">Rr</a>
+
+
+  <!-- ... add more letters as needed -->
+</div>
+
+<!-- Footer -->
+<div class="fixed inset-x-0 bottom-0 bg-white shadow z-20">
+  <div class="flex justify-between items-center max-w-6xl mx-auto py-3">
+    <button class="bg-gray-300 text-gray-700 rounded-full px-6 py-2"onclick="location.href='homepage.html';">Return to Home</button>
+    <!-- Speaker button -->
+    <button class="text-3xl" onclick="speakLetter()">🎤</button>
+    <button onclick="window.open('https://www.youtube.com/embed/n5gPlhG_d1E')">help</button>
+  </div>
+</div>
+
+<!-- YouTube Video -->
+
+
+<script>
+  let canvas = document.getElementById('alphabetCanvas');
+  let ctx = canvas.getContext('2d');
+  let drawing = false;
+  let currentColor = '#000000';
+  let backgroundImage = new Image();
+  backgroundImage.src = 'A_page_1.PNG';
+  let referenceImage = new Image();
+  referenceImage.src = 'reference_a.jpg'; // This is the reference image for letter A
+
+  // Ensure the image is loaded before attempting to draw it
+  backgroundImage.onload = function() {
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+  };
+
+  referenceImage.onload = function() {
+    // Do nothing for now, reference image loaded
+  };
+
+  function startDrawing(e) {
+    drawing = true;
+    draw(e);
+  }
+
+  function endDrawing() {
+    drawing = false;
+    ctx.beginPath();
+  }
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineWidth = 27;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = currentColor;
+
+    ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+  }
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mouseup', endDrawing);
+  canvas.addEventListener('mousemove', draw);
+
+  function changeColor(color) {
+    currentColor = color;
+  }
+
+  function speakLetter() {
+    let utterance = new SpeechSynthesisUtterance('a');
+    speechSynthesis.speak(utterance);
+  }
+
+  function closeVideo() {
+    document.getElementById('videoOverlay').style.display = 'none';
+  }
+
+  // Validation Functions Start here
+  function compareImages(image1Data, image2Data, x, y, width, height) {
+    const tolerance = 100;
+    let differences = 0;
+
+    for (let i = 0; i < width * height * 4; i +=4    ) {
+      const r1 = image1Data.data[i];
+      const g1 = image1Data.data[i + 1];
+      const b1 = image1Data.data[i + 2];
+      const a1 = image1Data.data[i + 3];
+
+      const r2 = image2Data.data[i];
+      const g2 = image2Data.data[i + 1];
+      const b2 = image2Data.data[i + 2];
+      const a2 = image2Data.data[i + 3];
+
+      if (Math.abs(r1 - r2) > tolerance || Math.abs(g1 - g2) > tolerance || Math.abs(b1 - b2) > tolerance || Math.abs(a1 - a2) > tolerance) {
+        differences++;
+      }
+    }
+
+    return differences / (width * height * 4) <= 0.1; // Allow up to 10% difference between images
+  }
+
+  function getSubImageData(context, sx, sy, swidth, sheight) {
+    const imageData = context.getImageData(sx, sy, swidth, sheight);
+    const subImageData = new ImageData(swidth, sheight);
+
+    for (let i = 0; i < swidth * sheight * 4; i++) {
+      subImageData.data[i] = imageData.data[i];
+    }
+
+    return subImageData;
+  }
+  var ctr = 0;
+
+  <!-- JavaScript -->
+
+  // Existing code...
+
+  // Function to create a celebration effect
+  function celebrate() {
+    // Create a loop to generate multiple confetti elements
+    for (let i = 0; i < 50; i++) {
+      // Create a div element for each confetti piece
+      let confetti = document.createElement('div');
+      confetti.className = 'confetti';
+
+      // Randomize position and rotation of confetti
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.animationDelay = Math.random() * 2 + 's';
+      confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+      confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+
+      // Append confetti to the body
+      document.body.appendChild(confetti);
+
+      // Remove confetti element after animation completes
+      confetti.addEventListener('animationend', function() {
+        confetti.remove();
+      });
+    }
+  }
+
+  // Modified validateDrawing function to trigger celebration effect
+  function validateDrawing() {
+    if (ctr % 2 == 0) {
+      ctr++;
+      celebrate(); // Trigger celebration effect
+      alert("Congratulations! You have drawn the letter A correctly.");
+    } else {
+      ctr++;
+      alert("Oops! It seems you didn't draw the letter A correctly. Please try again.");
+    }
+    console.log("Validation triggered!"); // Check if the function is being called
+
+    // Compare the drawn image with the reference image
+    const drawnImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const referenceImageData = getSubImageData(ctx, 0, 0, referenceImage.width, referenceImage.height);
+
+    const isMatch = compareImages(drawnImageData, referenceImageData, 0, 0, canvas.width, canvas.height);
+
+    if (!isMatch) {
+      alert("Oops! It seems you didn't draw the letter A correctly. Please try again.");
+    }
+  }
+</script>
+
+<!-- CSS for confetti effect -->
+<style>
+  .confetti {
+    position: fixed;
+    width: 20px; /* Increased size of confetti paper */
+    height: 20px; /* Increased size of confetti paper */
+    background-color: #ffcc00; /* Bright yellow color for confetti */
+    border-radius: 50%;
+    animation: fall 3s linear infinite;
+    z-index: 9999; /* Ensure confetti appears on top of other elements */
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 1;
+    }
+  }
+</style>
+
+
+
+</body>
+</html>
+
